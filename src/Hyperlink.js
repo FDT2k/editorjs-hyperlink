@@ -25,6 +25,7 @@ export default class Hyperlink {
             selectTarget: 'ce-inline-tool-hyperlink--select-target',
             selectRel: 'ce-inline-tool-hyperlink--select-rel',
             buttonSave: 'ce-inline-tool-hyperlink--button',
+            buttonBrowse: 'ce-inline-tool-browse--button',
         };
 
         this.targetAttributes = this.config.availableTargets || [
@@ -57,6 +58,7 @@ export default class Hyperlink {
             selectTarget: null,
             selectRel: null,
             buttonSave: null,
+            buttonBrowse:null
         };
 
         this.inputOpened = false;
@@ -68,6 +70,7 @@ export default class Hyperlink {
         this.nodes.button.classList.add(this.CSS.button, this.CSS.buttonModifier);
         this.nodes.button.appendChild(this.iconSvg('link', 14, 10));
         this.nodes.button.appendChild(this.iconSvg('unlink', 15, 11));
+        
         return this.nodes.button;
     }
 
@@ -80,15 +83,44 @@ export default class Hyperlink {
         this.nodes.input.placeholder = 'https://...';
         this.nodes.input.classList.add(this.CSS.input);
 
+        if(this.config.browseCallback){
+            this.nodes.buttonBrowse= document.createElement('button');
+            this.nodes.buttonBrowse.type = 'button';
+            this.nodes.buttonBrowse.classList.add(this.CSS.buttonBrowse);
+            this.nodes.buttonBrowse.innerHTML = this.i18n.t('Browse');
+
+            this.nodes.buttonBrowse.addEventListener('click', (event) => {
+                this.config.browseCallback( file=>{
+
+                    this.nodes.input.value = file;
+                    console.log(file);
+                },this);
+            });
+        }
         let i;
 
         // Target
         this.nodes.selectTarget = document.createElement('select');
         this.nodes.selectTarget.classList.add(this.CSS.selectTarget);
         this.addOption(this.nodes.selectTarget, this.i18n.t('Select target'), '');
-        for (i=0; i<this.targetAttributes.length; i++) {
+       /* for (i=0; i<this.targetAttributes.length; i++) {
             this.addOption(this.nodes.selectTarget, this.targetAttributes[i], this.targetAttributes[i]);
-        }
+        }*/
+        this.targetAttributes.map(target=>{
+
+            const value = target;
+            const name = target;
+            if(typeof target === 'object'){
+                const k = Object.keys(target);
+                console.log(k);
+                k.map( key => {
+                 this.addOption(this.nodes.selectTarget,  target[key],key);
+
+                })
+            }else{
+                this.addOption(this.nodes.selectTarget, target, target);
+            }
+        });
 
         if(!!this.config.target) {
             if(this.targetAttributes.length === 0) {
@@ -97,6 +129,7 @@ export default class Hyperlink {
 
             this.nodes.selectTarget.value = this.config.target;
         }
+
 
         // Rel
         this.nodes.selectRel = document.createElement('select');
@@ -125,7 +158,7 @@ export default class Hyperlink {
 
         // append
         this.nodes.wrapper.appendChild(this.nodes.input);
-
+        this.nodes.wrapper.appendChild(this.nodes.buttonBrowse);
         if(!!this.targetAttributes && this.targetAttributes.length > 0) {
             this.nodes.wrapper.appendChild(this.nodes.selectTarget);
         }
@@ -135,6 +168,7 @@ export default class Hyperlink {
         }
 
         this.nodes.wrapper.appendChild(this.nodes.buttonSave);
+    
 
         return this.nodes.wrapper;
     }
@@ -291,7 +325,19 @@ export default class Hyperlink {
 
     prepareLink(link) {
         link = link.trim();
+        link = this.makeAbsolute(link);
         link = this.addProtocol(link);
+        return link;
+    }
+
+    makeAbsolute(link) {
+        const isAbsolute = /^\/[^/\s]?/.test(link);
+        const isProtocolRelative = /^\/\/[^/\s]/.test(link);
+        const isAnchor = link.substring(0, 1) === '#';
+        if(this.config.shouldMakeLinkAbsolute && !isProtocolRelative && !isAbsolute && !isAnchor){
+            return `/${link}`;
+
+        }
         return link;
     }
 
@@ -304,7 +350,7 @@ export default class Hyperlink {
             isAnchor = link.substring(0, 1) === '#',
             isProtocolRelative = /^\/\/[^/\s]/.test(link);
 
-        if (!isInternal && !isAnchor && !isProtocolRelative) {
+        if (this.config.shouldAppendProtocol && !isInternal && !isAnchor && !isProtocolRelative) {
             link = 'http://' + link;
         }
 

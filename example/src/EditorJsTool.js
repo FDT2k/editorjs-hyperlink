@@ -16,9 +16,17 @@ export const EDITOR_JS_TOOLS: { [toolName: string]: ToolConstructable | ToolSett
             shortcut: 'CMD+L',
             target: '_blank', // default null
             rel: 'nofollow', // default null
-            availableTargets: ['_blank', '_self'],
-            availableRels: ['author', 'noreferrer'],
-            validate: false
+            availableTargets: [ '_self',{'frame':'Cadre','_blank':'Nouvelle Fenêtre'}],
+            availableRels: [],
+            validate: false,
+            shouldAppendProtocol:false,
+            shouldMakeLinkAbsolute: true,
+            browseCallback : function (callback){
+
+                console.log('browse clicked');
+
+                callback('file.txt');
+            }
         },
     },
 };

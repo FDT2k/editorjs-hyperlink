@@ -1,6 +1,6 @@
 {
-  "name": "editorjs-hyperlink",
-  "version": "1.0.6",
+  "name": "editorjs-hyperlink-browse",
+  "version": "1.0.0",
   "description": "Link with target & rel attribute for Editor.js",
   "main": "./dist/bundle.js",
   "scripts": {
@@ -15,7 +15,7 @@
     "editor.js",
     "editorjs"
   ],
-  "author": "TamIT <tam.maris94@gmail.com> (https://tamit.info)",
+  "author": "",
   "license": "MIT",
   "repository": {
     "type": "git",
