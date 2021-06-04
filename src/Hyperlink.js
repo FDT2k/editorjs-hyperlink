@@ -333,8 +333,9 @@ export default class Hyperlink {
     makeAbsolute(link) {
         const isAbsolute = /^\/[^/\s]?/.test(link);
         const isProtocolRelative = /^\/\/[^/\s]/.test(link);
+        const isProtocolAbsolute = /^(\w+):\/\/[^/\s]/.test(link);
         const isAnchor = link.substring(0, 1) === '#';
-        if(this.config.shouldMakeLinkAbsolute && !isProtocolRelative && !isAbsolute && !isAnchor){
+        if(this.config.shouldMakeLinkAbsolute && !isProtocolRelative && !isAbsolute && !isAnchor && !isProtocolAbsolute){
             return `/${link}`;
 
         }
