@@ -15,15 +15,15 @@
     "editor.js",
     "editorjs"
   ],
-  "author": "",
+  "author": "Fabien Karsegard",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/trinhtam/editorjs-hyperlink.git"
+    "url": "git+https://github.com/FDT2k/editorjs-hyperlink"
   },
-  "homepage": "https://github.com/trinhtam/editorjs-hyperlink",
+  "homepage": "https://github.com/FDT2k/editorjs-hyperlink",
   "bugs": {
-    "url": "https://github.com/trinhtam/editorjs-hyperlink/issues"
+    "url": "https://github.com/FDT2k/editorjs-hyperlink/issues"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
