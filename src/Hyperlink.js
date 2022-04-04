@@ -334,8 +334,10 @@ export default class Hyperlink {
         const isAbsolute = /^\/[^/\s]?/.test(link);
         const isProtocolRelative = /^\/\/[^/\s]/.test(link);
         const isProtocolAbsolute = /^(\w+):\/\/[^/\s]/.test(link);
+        const isMailtoProtocolAbsolute = /^mailto:.*/.test(link);
         const isAnchor = link.substring(0, 1) === '#';
-        if(this.config.shouldMakeLinkAbsolute && !isProtocolRelative && !isAbsolute && !isAnchor && !isProtocolAbsolute){
+
+        if(this.config.shouldMakeLinkAbsolute && !isProtocolRelative && !isAbsolute && !isAnchor && !isProtocolAbsolute && !isMailtoProtocolAbsolute){
             return `/${link}`;
 
         }

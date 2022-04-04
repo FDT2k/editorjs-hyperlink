@@ -1,3 +1,6 @@
+.ce-inline-toolbar {
+    z-index:9999;
+}
 .ce-inline-tool-hyperlink-wrapper {
     outline: none;
     border: 0;
@@ -15,6 +18,7 @@
 
 .ce-inline-tool-hyperlink-wrapper.ce-inline-tool-hyperlink-wrapper--showed {
     display: block;
+    z-index:9999;
 }
 
 .ce-inline-tool-hyperlink--input,
